@@ -21,3 +21,17 @@
 <img width="391" alt="interval" src="https://user-images.githubusercontent.com/102263800/160948324-a28982b1-7be6-43c0-9e87-da3231624dbe.png">
 
 <p>Bonus Question Can you change the collection interval without modifying the Python check file you created?</p>
+
+<h3> Visualizing Data </h3>
+Utilize the Datadog API to create a Timeboard that contains:
+
+Your custom metric scoped over your host.
+Any metric from the Integration on your Database with the anomaly function applied.
+Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket
+Please be sure, when submitting your hiring challenge, to include the script that you've used to create this Timeboard.
+
+Once this is created, access the Dashboard from your Dashboard List in the UI:
+
+Set the Timeboard's timeframe to the past 5 minutes
+Take a snapshot of this graph and use the @ notation to send it to yourself.
+Bonus Question: What is the Anomaly graph displaying?
