@@ -33,24 +33,64 @@
 
 
 <p>#Bonus Question Can you change the collection interval without modifying the Python check file you created?</p>
-<p>Yes</p>
+<p>Yes, by changing the interval in the .yaml file.</p>
 
 <h3> Visualizing Data </h3>
-<p>Utilize the Datadog API to create a Timeboard that contains:
+<p>#Utilize the Datadog API to create a Timeboard that contains:</p>
 
-<p>Your custom metric scoped over your host.
+<p>#Your custom metric scoped over your host.</p>
 
-Any metric from the Integration on your Database with the anomaly function applied.
+<p>Any metric from the Integration on your Database with the anomaly function applied.</p>
 
-Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket.
+<p>Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket.</p>
 <img width="1278" alt="dashboard_screenshot" src="https://user-images.githubusercontent.com/102263800/160955613-0b34613f-fb14-409a-a6f3-da6162406da6.png">
+<p>
 
-Please be sure, when submitting your hiring challenge, to include the script that you've used to create this Timeboard.</p>
+<p>Please be sure, when submitting your hiring challenge, to include the script that you've used to create this Timeboard.</p>
 
-Once this is created, access the Dashboard from your Dashboard List in the UI:
+<p>Once this is created, access the Dashboard from your Dashboard List in the UI:</p>
 
-Set the Timeboard's timeframe to the past 5 minutes
-Take a snapshot of this graph and use the @ notation to send it to yourself.
-<img width="778" alt="timeboard_snapshot" src="https://user-images.githubusercontent.com/102263800/160955892-38a57d90-c621-4b0a-853d-8db01421ba0c.png">
+<p>Set the Timeboard's timeframe to the past 5 minutes</p>
+<p>Take a snapshot of this graph and use the @ notation to send it to yourself.</p>
 
-Bonus Question: What is the Anomaly graph displaying?
+
+<p>#Bonus Question: What is the Anomaly graph displaying?</p>
+
+
+<h3>Monitoring Data</h3>
+<p>#Since you’ve already caught your test metric going above 800 once, you don’t want to have to continually watch this dashboard to be alerted when it goes above 800 again. So let’s make life easier by creating a monitor.</p>
+
+<p>#Create a new Metric Monitor that watches the average of your custom metric (my_metric) and will alert if it’s above the following values over the past 5 minutes:</p>
+
+<ul>#Warning threshold of 500</ul>
+<ul>#Alerting threshold of 800</ul>
+<ul>#And also ensure that it will notify you if there is No Data for this query over the past 10m.</ul>
+<img width="765" alt="email_warning" src="https://user-images.githubusercontent.com/102263800/161653103-6581acbe-2d30-4f23-9086-ca86a8baa4a1.png">
+<p>#Please configure the monitor’s message so that it will:</p>
+
+<ul>#Send you an email whenever the monitor triggers.</ul>
+<ul>#Create different messages based on whether the monitor is in an Alert, Warning, or No Data state.</ul>
+<ul>#Include the metric value that caused the monitor to trigger and host ip when the Monitor triggers an Alert state.</ul>
+<ul>#When this monitor sends you an email notification, take a screenshot of the email that it sends you.</ul>
+
+<p>#Bonus Question: Since this monitor is going to alert pretty often, you don’t want to be alerted when you are out of the office. Set up two scheduled downtimes for this monitor:</p>
+
+<ul>#One that silences it from 7pm to 9am daily on M-F,</ul>
+<img width="799" alt="bonus1" src="https://user-images.githubusercontent.com/102263800/161659441-c8ab883f-968a-4558-8274-ccc5c92721e8.png">
+<img width="716" alt="bonus1_email" src="https://user-images.githubusercontent.com/102263800/161659449-09fe1ae0-28cb-4ca0-a223-17d3b5ea82cf.png">
+<ul>#And one that silences it all day on Sat-Sun.</ul>
+<img width="842" alt="bonus2" src="https://user-images.githubusercontent.com/102263800/161659461-6765e650-0968-46b2-ab38-b5ab4423ff72.png">
+<img width="717" alt="bonus2_email" src="https://user-images.githubusercontent.com/102263800/161659479-532d292a-b1cb-4af5-91ca-97d7d4498b2d.png">
+
+<ul>#Make sure that your email is notified when you schedule the downtime and take a screenshot of that notification.</ul>
+<img width="710" alt="downtime_email" src="https://user-images.githubusercontent.com/102263800/161660178-a8792adc-2029-41bc-a073-642b0398aebb.png">
+
+<h3>APM Data</h3>
+
+<h3>Final Data</h3>
+<p>Datadog has been used in a lot of creative ways in the past. We’ve written some blog posts about using Datadog to monitor the NYC Subway System, Pokemon Go, and even office restroom availability!
+
+Is there anything creative you would use Datadog for?</p>
+<p>As a musician and music lover, I have come to greatly appreciate the process of creating music and listening to it. However, it can be nerve-wracking to constantly watch your social media or Spotify for Artists application to try to determine the listening patterns of your listeners. I would use Datadog in association with the Spotify for Artists app to create monitors for how long a user is listening to my music, and try to send out email lists for people who listen over 30 minutes (or any set amount of time). This could allow for my fans who greatly appreciate my music to be a part of my touring schedule and promotional updates. </p>
+
+
