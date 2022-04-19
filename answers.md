@@ -1,35 +1,46 @@
 ### Prerequistes
 > You can utilize any OS/host that you would like to complete this exercise. However, we recommend one of the following approaches:
 
->You can spin up a fresh linux VM via Vagrant or other tools so that you don’t run into any OS or dependency issues. Here are instructions for setting up a Vagrant Ubuntu VM. We strongly recommend using minimum v. 16.04 to avoid dependency issues.
+> You can spin up a fresh linux VM via Vagrant or other tools so that you don’t run into any OS or dependency issues. Here are instructions for setting up a Vagrant Ubuntu VM. We strongly recommend using minimum v. 16.04 to avoid dependency issues.
 You can utilize a Containerized approach with Docker for Linux and our dockerized Datadog Agent image.
 Once this is ready, sign up for a trial Datadog at https://www.datadoghq.com/
 
->Please make sure to use “Datadog Recruiting Candidate” in the “Company” field
+> Please make sure to use “Datadog Recruiting Candidate” in the “Company” field
 
->Then, get the Agent reporting metrics from your local machine and move on to the next section...
+> Then, get the Agent reporting metrics from your local machine and move on to the next section...
 
-<p>First, I read the Datadog References guide before beginning the Hiring Challenge. </p>
-<p> Then, I decided to create a Virtual Machine on my laptop to avoid dependency issues. To do this, I read the Vagrant web page and followed along with their instructions at https://learn.hashicorp.com/collections/vagrant/getting-started. Additionally, I installed Virtual Box to run Vagrant properly. </p>
+As promised, this assignment was fun and interesting, and I've already begun thinking of ways I can use Datadog to track and monitor my music streaming data :joy: .
+<br/>
+First, I read the Datadog References guide before beginning the Hiring Challenge; these references give great background on how Datadog works and how to replicate the process on your machine. 
+Then, I decided to create a Virtual Machine on my laptop to avoid dependency issues on my Mac. To do this, I read the Vagrant web page and followed along with their instructions at https://learn.hashicorp.com/collections/vagrant/getting-started. Additionally, I installed Virtual Box to run Vagrant properly. 
 <img width="280" alt="vagrant_version" src="https://user-images.githubusercontent.com/102263800/160946443-86801dee-e3e5-4578-9e73-19ec63e13840.png">
 <p> After setting up Vagrant and Virtual Box, I created a trial acount with Datadog at https://www.datadoghq.com/. </p>
 <img width="1430" alt="datadog_account" src="https://user-images.githubusercontent.com/102263800/160946577-1be3304c-0cbb-41d2-8a82-097f615ad7cc.png">
-<p> Next, I set up the Datadog agent using the https://docs.datadoghq.com/ link and also the https://docs.datadoghq.com/agent/ link. After reading through the instructions and used the CLI commands to configure it.
+<p> Next, I set up the Datadog agent using the https://docs.datadoghq.com/ link and also the https://docs.datadoghq.com/agent/ link. After reading through the instructions, I used the CLI commands to configure it.
 <img width="932" alt="agent_status" src="https://user-images.githubusercontent.com/102263800/160947139-3073e070-34bd-4d07-8a78-d4f88c2bf089.png">
-<p>  'sudo service datadog-agent status' </p>
+<p> Run </p>
 
+`sudo service datadog-agent status`
+
+<p> to view status of your Agent. </p>
+    
 ### Collecting Metrics
 > Add tags in the Agent config file and show us a screenshot of your host and its tags on the Host Map page in Datadog.
 <img width="1232" alt="agent_tags" src="https://user-images.githubusercontent.com/102263800/160947792-5eaf0a5d-cca5-4673-a96e-f0509c2b973e.png">
-I added the tags using the Datadog GUI. Once you select your host, you can enter the tags in the field on the right hand side of the screen, labeled, "Add new comma-separated tags here".
+<p> I added the tags using the Datadog GUI. Once you select your host, you can enter the tags in the field on the right hand side of the screen, labeled, "Add new comma-separated tags here". </p>
+<p> 🎸 In my Final bonus answer, I mention using Datadog to as an artist tool to monitor streams by a user. In this case, I could add a tag for a particular streaming service, for example, "streamingService: Spotify". </p> 
+<br />
 
 > Install a database on your machine (MongoDB, MySQL, or PostgreSQL) and then install the respective Datadog integration for that database.
 <img width="926" alt="sql running" src="https://user-images.githubusercontent.com/102263800/160947962-3e943d61-48eb-4fb9-b00b-1457618ba599.png">
 <p>With the help of this website, https://phoenixnap.com/kb/install-mysql-ubuntu-20-04, I then ran the command 'sudo apt install mysql-server'. To then check the version, I ran the 'mysql --version' command. </p>
+
+`mysql --version`
+
 <p>After I installed mySQL, the next step was to prepare the server by adding a datadog user and password.</p>
 
 
-'''
+```sql
 mysql> CREATE USER 'datadog'@'%' IDENTIFIED WITH mysql_native_password by 'datadog';
 
 mysql -u datadog --password=datadog -e "show status" | \
@@ -39,12 +50,12 @@ echo -e "\033[0;31mCannot connect to MySQL\033[0m"
 mysql -u datadog --password=datadog -e "show slave status" && \
 echo -e "\033[0;32mMySQL grant - OK\033[0m" || \
 echo -e "\033[0;31mMissing REPLICATION CLIENT grant\033[0m"
-'''
+```
 
 > Create a custom Agent check that submits a metric named my_metric with a random value between 0 and 1000.
 
 
-'''
+```python
 #the following try/except block will make the custom check compatible with any Agent version
 import random
 try:
@@ -58,18 +69,20 @@ __version__ = "1.0.0"
 class NikiCheck(AgentCheck):
     def check(self, instance):
         self.gauge('niki.check', random.randint(1,1000))
-'''
+```
 
 
 <p>To do this, I went into the '/etc/datadog-agent/conf.d' directory and created the configuration file, custom_nikicheck.yaml (which needs to match the name of custom_nikicheck.py).</p>
 <p>Then, I went into the '/checks.d' directory and created the Python script for custom_nikicheck.py using the guide, https://docs.datadoghq.com/developers/write_agent_check/?tab=agentv6v7. I had to import the 'random' method to submit that random value inbetween 0 and 1000.</p>
 <p>You can check to see that your check is running by entering the command, 'sudo -u dd-agent -- datadog-agent check my_metric'. Then, you can see the metric in the Metrics Dashboard on the Datadog GUI.</p>
+
+`sudo -u dd-agent -- datadog-agent check my_metric`
+
 <img width="224" alt="metric" src="https://user-images.githubusercontent.com/102263800/160954688-f217ace3-b5e2-4350-9245-ceeee7d1b81e.png">
   
->#Change your check's collection interval so that it only submits the metric once every 45 seconds.
+> Change your check's collection interval so that it only submits the metric once every 45 seconds.
 
-
-'''
+```python
 #init_config: 
 
 #instances: [{}]
@@ -77,7 +90,7 @@ init_config:
 
 instances:
   - min_collection_interval: 45
-'''
+```
     
     
 <p>Finally, I went back into the 'conf.d' directory and opened my 'custom_nikicheck.yaml' file, and added the interval collection lines of code from the same website above.</p>
@@ -95,7 +108,6 @@ instances:
 > - Your custom metric with the rollup function applied to sum up all the points for the past hour into one bucket.
 
 <img width="1278" alt="dashboard_screenshot" src="https://user-images.githubusercontent.com/102263800/160955613-0b34613f-fb14-409a-a6f3-da6162406da6.png">
-
 
 > Please be sure, when submitting your hiring challenge, to include the script that you've used to create this Timeboard.
 
@@ -115,6 +127,7 @@ instances:
 - The anomaly graph shows spikes using historic data to determine if there are any abnormalities being monitored.</p>
 
 ### Monitoring Data
+![alert](https://user-images.githubusercontent.com/102263800/164050591-2a55cd75-d140-457b-8b6b-9d2932558297.gif)
 > Since you’ve already caught your test metric going above 800 once, you don’t want to have to continually watch this dashboard to be alerted when it goes above 800 again. So let’s make life easier by creating a monitor.
 > Create a new Metric Monitor that watches the average of your custom metric (my_metric) and will alert if it’s above the following values over the past 5 minutes:
 > - #Warning threshold of 500
@@ -151,7 +164,7 @@ instances:
 ### APM Data
 > Given the following Flask app (or any Python/Ruby/Go app of your choice) instrument this using Datadog’s APM solution:
 
-'''
+```python
 from flask import Flask
 import logging
 import sys
@@ -180,7 +193,7 @@ def trace_endpoint():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5050')
-'''
+```
 
 <p>I downloaded flask and used https://docs.datadoghq.com/getting_started/tracing/ to make sure that everything was set up properly before tracing. Then, I followed this page https://docs.datadoghq.com/tracing/setup_overview/setup/python/?tab=otherenvironments to install the ddtrace module which connects to the Datadog Agent. I set multiple tags, using this in my CLI: "DD_SERVICE="sample_app" DD_ENV="dev" DD_LOGS_INJECTION=true DD_TRACE_SAMPLE_RATE="1" DD_PROFILING_ENABLED=true ddtrace-run python sample_app.py --port=4999". </p>
   
@@ -190,14 +203,38 @@ if __name__ == '__main__':
 > Provide a link and a screenshot of a Dashboard with both APM and Infrastructure Metrics.
 > Please include your fully instrumented app in your submission, as well.
 <img width="744" alt="services_page" src="https://user-images.githubusercontent.com/102263800/161863969-f8c38bb4-385e-48da-96d8-708bdcabba8b.png">
-<p>Even though the APM service I set up did not show on the Datadog dashboard, you can see that the env variable was correctly set up on the CLI and is reflected on the Datadog GUI. I got to the "Services" page by clicking the "APM" tab on the left-hand side of my page. I used the https://docs.datadoghq.com/agent/guide/agent-log-files/?tab=agentv6v7 page to look up commands  to help troubleshoot the connectivity problem and ran the agent.log / trace-agent.log command which did not show any errors. </p>
-<img width="960" alt="logs-screenshot" src="https://user-images.githubusercontent.com/102263800/161864647-ef55b5c1-72c6-4935-a204-1dc6b1406db2.png">
-![giphy](https://user-images.githubusercontent.com/102263800/163732999-cd28f1f0-ce20-46ff-94db-12dc144fa1bc.gif)
+<p>Even though the APM service I set up did not show on the Datadog dashboard, you can see that the env variable was correctly set up on the CLI and is reflected on the Datadog GUI. I got to the "Services" page by clicking the "APM" tab on the left-hand side of my page. I used the https://docs.datadoghq.com/agent/guide/agent-log-files/?tab=agentv6v7 page to look up commands  to help troubleshoot the connectivity problem and ran the agent.log / trace-agent.log command which did not show any errors. To test the APM metrics, run </p>
+
+`curl http://0.0.0.0:5050/`
+
+<img width="962" alt="Screen Shot 2022-04-18 at 9 43 31 PM" src="https://user-images.githubusercontent.com/102263800/163903880-8fb3ec10-f42c-49e4-a9bb-4e38bc535bb3.png">
+
+![giphy](https://user-images.githubusercontent.com/102263800/164050821-919932b1-6bd8-4348-854d-20c0f19b4cce.gif)
 
 
-### Final Data
+### Final Bonus
 > Datadog has been used in a lot of creative ways in the past. We’ve written some blog posts about using Datadog to monitor the NYC Subway System, Pokemon Go, and even office restroom availability! Is there anything creative you would use Datadog for?
 
+🎵
 <p>As a musician and music lover, I have come to greatly appreciate the process of creating music and listening to it. However, it can be nerve-wracking to constantly watch your social media or Spotify for Artists application to try to determine the listening patterns of your listeners. I would use Datadog in association with the Spotify for Artists app to create monitors for how long a user is listening to my music, and try to send out email lists for people who listen over 30 minutes (or any set amount of time). This could allow for my fans who greatly appreciate my music to be a part of my touring schedule and promotional updates. </p>
+
+> Monitor
+>  - length of time listened to a track
+>  - amount of times listened to a track (song) by one individual person (or location)
+>  - specific times that a song is listened to 
+>  - number of requests within a certain interval of time to open an artist page or song 
+
+> Track
+>  - number of users listening at all times
+>  - location of listeners
+>  - age of listeners
+
+> Trigger
+>  - once length of time spent listening to an artist's songs is greater than 30 minutes,  show concerts in the area
+>  - if account page is followed, trigger a notification to follow my band's social media pages
+>  - if length of time spent listening to an artist's songs is greater than an hour, send listener a notification to join my band's email list 
+>  - if number of requests is over a certain threshold, send an alert to the streaming service to notify them of a potential bad actor
+
+<p> From the perspective of a use case diagram, the actor is the listener, the system is the streaming service and the Datadog agent/ APM tool, and the goal is to increase listeners/ followers. Having all of this information would allow the artist to know their fans better and grow their fan base. Having triggers to notify an artist with real-time data on how much a user is listening can help prompt social media postings, advertisements, and other ways to help self promote themselves. Rock on! </p>
 
 
